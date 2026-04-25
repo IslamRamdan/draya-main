@@ -21,14 +21,23 @@ class WorkController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'nullable',
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'nullable',
+            'description' => 'nullable|string',
         ]);
 
-        Work::create($data);
+        $data = $request->only(['title', 'description']);
 
-        return redirect()->route('works.index')->with('success', 'تمت الإضافة');
+        // رفع الصورة
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('works', 'public');
+        }
+
+        $work = Work::create($data);
+
+        return redirect()->route('works.index')
+            ->with('success', 'تم إضافة العمل بنجاح');
     }
 
     public function edit($id)
@@ -41,14 +50,22 @@ class WorkController extends Controller
     {
         $work = Work::findOrFail($id);
 
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'nullable',
+        $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'image' => 'nullable',
+            'description' => 'nullable|string',
         ]);
+
+        $data = $request->only(['title', 'description']);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('works', 'public');
+        }
 
         $work->update($data);
 
-        return redirect()->route('works.index')->with('success', 'تم التعديل');
+        return redirect()->route('works.index')
+            ->with('success', 'تم تحديث العمل بنجاح');
     }
 
     public function destroy($id)

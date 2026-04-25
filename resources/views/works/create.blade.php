@@ -13,7 +13,7 @@
             <div class="card border-0 shadow-sm" style="border-radius: 15px;">
                 <div class="card-body p-4">
 
-                    <form action="{{ route('works.store') }}" method="POST">
+                    <form action="{{ route('works.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         {{-- عنوان العمل --}}
@@ -38,8 +38,29 @@
                             <textarea name="description" class="form-control shadow-none" rows="6"
                                 placeholder="اشرح تفاصيل العمل وما تم إنجازه فيه..."
                                 style="border-radius: 10px; resize: none; padding: 15px; border: 1px solid #dee2e6;"></textarea>
-                            <small class="text-muted"><i class="fas fa-info-circle mt-2"></i> سيظهر هذا الوصف في معرض
-                                الأعمال بشكل مختصر.</small>
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle mt-2"></i> سيظهر هذا الوصف في معرض الأعمال بشكل مختصر.
+                            </small>
+                        </div>
+
+                        {{-- الصورة --}}
+                        <div class="form-group mb-4">
+                            <label class="font-weight-bold text-dark">صورة العمل</label>
+
+                            <div class="custom-file">
+                                <input type="file" name="image" class="custom-file-input" id="imageInput">
+                                <label class="custom-file-label" for="imageInput">اختر صورة...</label>
+                            </div>
+
+                            <small class="text-muted d-block mt-2">
+                                <i class="fas fa-image"></i> يفضل صورة بجودة عالية (JPG, PNG)
+                            </small>
+
+                            {{-- معاينة الصورة --}}
+                            <div class="mt-3 text-center">
+                                <img id="previewImage" src="#" alt="preview"
+                                    style="display:none; max-height:200px; border-radius:10px;">
+                            </div>
                         </div>
 
                         <hr class="my-4" style="opacity: 0.5;">
@@ -72,5 +93,21 @@
             border-color: #ced4da;
         }
     </style>
+
+    {{-- سكربت عرض اسم الصورة + preview --}}
+    <script>
+        document.getElementById('imageInput').onchange = function(e) {
+            let fileName = e.target.files[0].name;
+            e.target.nextElementSibling.innerHTML = fileName;
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.getElementById('previewImage');
+                img.src = e.target.result;
+                img.style.display = 'block';
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        };
+    </script>
 
 @stop

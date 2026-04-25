@@ -28,7 +28,7 @@
                             {{-- نوع القضية --}}
                             <div class="col-md-5">
                                 <div class="form-group mb-4">
-                                    <label class="font-weight-bold">نوع القضية</label>
+                                    <label class="font-weight-bold">نوع المحتوى</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-white border-right-0"><i

@@ -26,6 +26,43 @@
                 <div class="card h-100 border-0 shadow-sm work-card"
                     style="border-radius: 15px; overflow: hidden; transition: all 0.3s ease;">
 
+                    {{-- الصورة --}}
+                    @php
+                        $file = $work->image;
+                        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    @endphp
+
+                    @if ($file)
+                        @if ($extension === 'pdf')
+                            {{-- صورة ثابتة للـ PDF --}}
+                            <div
+                                style="height: 200px; overflow: hidden; display:flex; align-items:center; justify-content:center;">
+                                <img src="https://img.freepik.com/vecteurs-premium/icone-du-logiciel-pdf_539007-781.jpg?semt=ais_hybrid&w=740"
+                                    alt="PDF" style="max-height: 100%; object-fit: contain;">
+                            </div>
+
+                            {{-- زر فتح --}}
+                            <div class="mt-2 text-center">
+                                <a href="{{ asset('storage/' . $file) }}" target="_blank" class="btn btn-danger">
+                                    فتح PDF
+                                </a>
+                            </div>
+                        @else
+                            {{-- عرض الصورة --}}
+                            <div style="height: 200px; overflow: hidden;">
+                                <img src="{{ asset('storage/' . $file) }}" alt="{{ $work->title }}"
+                                    style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            {{-- زر عرض --}}
+                            <div class="mt-2 text-center">
+                                <a href="{{ asset('storage/' . $file) }}" target="_blank" class="btn btn-primary">
+                                    عرض الصورة
+                                </a>
+                            </div>
+                        @endif
+                    @endif
+
                     {{-- Decorative Header Line --}}
                     <div style="height: 4px; background: #343a40;"></div>
 

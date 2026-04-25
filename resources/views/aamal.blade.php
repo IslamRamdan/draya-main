@@ -103,6 +103,14 @@
             height: 3px;
             background-color: var(--gold);
         }
+
+        .card-work img {
+            transition: transform 0.4s ease;
+        }
+
+        .card-work:hover img {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -155,19 +163,60 @@
 
                 @foreach ($works as $work)
                     <div class="col-md-4">
-                        <div class="card card-work p-4 h-100">
+                        <div class="card card-work p-0 h-100 overflow-hidden">
 
-                            <div class="icon-box mb-3">
-                                <i class="fas fa-gavel"></i>
+                            {{-- الصورة --}}
+                            @php
+                                $file = $work->image;
+                                $extension = pathinfo($file, PATHINFO_EXTENSION);
+                            @endphp
+
+                            @if ($file)
+                                @if (strtolower($extension) === 'pdf')
+                                    {{-- عرض صورة PDF --}}
+                                    <div
+                                        style="height:200px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                                        <img src="https://img.freepik.com/vecteurs-premium/icone-du-logiciel-pdf_539007-781.jpg?semt=ais_hybrid&w=740"
+                                            alt="PDF File" style="max-height:100%; object-fit:contain;">
+                                    </div>
+
+                                    {{-- زر فتح --}}
+                                    <div class="mt-2 text-center">
+                                        <a href="{{ asset('storage/' . $file) }}" target="_blank"
+                                            class="btn btn-danger">
+                                            فتح الملف PDF
+                                        </a>
+                                    </div>
+                                @else
+                                    {{-- عرض الصورة --}}
+                                    <div style="height:200px; overflow:hidden;">
+                                        <img src="{{ asset('storage/' . $file) }}" alt="{{ $work->title }}"
+                                            style="width:100%; height:100%; object-fit:cover;">
+                                    </div>
+
+                                    {{-- زر عرض --}}
+                                    <div class="mt-2 text-center">
+                                        <a href="{{ asset('storage/' . $file) }}" target="_blank"
+                                            class="btn btn-primary">
+                                            عرض الصورة
+                                        </a>
+                                    </div>
+                                @endif
+                            @endif
+
+                            <div class="p-4">
+                                <div class="icon-box mb-3">
+                                    <i class="fas fa-gavel"></i>
+                                </div>
+
+                                <h4 class="fw-bold">
+                                    {{ $work->title }}
+                                </h4>
+
+                                <p class="text-muted">
+                                    {{ \Illuminate\Support\Str::limit($work->description, 120) }}
+                                </p>
                             </div>
-
-                            <h4 class="fw-bold">
-                                {{ $work->title }}
-                            </h4>
-
-                            <p class="text-muted">
-                                {{ \Illuminate\Support\Str::limit($work->description, 120) }}
-                            </p>
 
                         </div>
                     </div>
@@ -208,7 +257,8 @@
                 <a href="https://www.facebook.com/share/1GkToW4QYs/" target="_blank" title="Facebook"><i
                         class="bi bi-facebook"></i></a>
 
-                <a href="https://wa.me/201044741051" target="_blank" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                <a href="https://wa.me/201044741051" target="_blank" title="WhatsApp"><i
+                        class="bi bi-whatsapp"></i></a>
 
                 <a href="mailto:derayah.low@gmail.com" title="Email"><i class="bi bi-envelope-fill"></i></a>
             </div>

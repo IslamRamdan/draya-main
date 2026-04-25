@@ -3,7 +3,9 @@
 @section('title', 'تعديل عمل')
 
 @section('content_header')
-    <h1 class="text-bold text-dark">تعديل العمل: <span class="text-primary">{{ $work->title }}</span></h1>
+    <h1 class="text-bold text-dark">
+        تعديل العمل: <span class="text-primary">{{ $work->title }}</span>
+    </h1>
 @stop
 
 @section('content')
@@ -13,7 +15,7 @@
             <div class="card border-0 shadow-sm" style="border-radius: 15px;">
                 <div class="card-body p-4">
 
-                    <form action="{{ route('works.update', $work->id) }}" method="POST">
+                    <form action="{{ route('works.update', $work->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -38,6 +40,31 @@
                             <label class="font-weight-bold text-dark">وصف العمل</label>
                             <textarea name="description" class="form-control shadow-none" rows="6" placeholder="اشرح تفاصيل العمل..."
                                 style="border-radius: 10px; resize: none; padding: 15px; border: 1px solid #dee2e6;">{{ $work->description }}</textarea>
+                        </div>
+
+                        {{-- الصورة الحالية --}}
+                        @if ($work->image)
+                            <div class="form-group mb-4 text-center">
+                                <label class="font-weight-bold text-dark d-block mb-2">الصورة الحالية</label>
+                                <img src="{{ asset('storage/' . $work->image) }}"
+                                    style="max-height: 200px; border-radius: 10px;">
+                            </div>
+                        @endif
+
+                        {{-- تغيير الصورة --}}
+                        <div class="form-group mb-4">
+                            <label class="font-weight-bold text-dark">تغيير الصورة</label>
+
+                            <div class="custom-file">
+                                <input type="file" name="image" class="custom-file-input" id="imageInput">
+                                <label class="custom-file-label" for="imageInput">اختر صورة جديدة...</label>
+                            </div>
+
+                            {{-- preview --}}
+                            <div class="mt-3 text-center">
+                                <img id="previewImage" src="#"
+                                    style="display:none; max-height:200px; border-radius:10px;">
+                            </div>
                         </div>
 
                         <hr class="my-4" style="opacity: 0.5;">
@@ -70,5 +97,21 @@
             border-color: #ced4da;
         }
     </style>
+
+    {{-- سكربت preview --}}
+    <script>
+        document.getElementById('imageInput').onchange = function(e) {
+            let fileName = e.target.files[0].name;
+            e.target.nextElementSibling.innerHTML = fileName;
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.getElementById('previewImage');
+                img.src = e.target.result;
+                img.style.display = 'block';
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        };
+    </script>
 
 @stop

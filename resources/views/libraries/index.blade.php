@@ -26,7 +26,7 @@
                 <thead class="bg-light">
                     <tr>
                         <th class="border-0 py-3 px-4" style="width: 25%">العنوان</th>
-                        <th class="border-0 py-3" style="width: 20%">نوع القضية</th>
+                        <th class="border-0 py-3" style="width: 20%">نوع المحتوى</th>
                         <th class="border-0 py-3 text-center" style="width: 15%">الصورة</th>
                         <th class="border-0 py-3 text-center" style="width: 20%">إجراءات التحكم</th>
                     </tr>
