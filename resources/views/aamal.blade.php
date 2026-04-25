@@ -214,8 +214,37 @@
                                 </h4>
 
                                 <p class="text-muted">
-                                    {{ \Illuminate\Support\Str::limit($work->description, 120) }}
+                                    <span id="short-desc-{{ $work->id }}">
+                                        {{ \Illuminate\Support\Str::limit($work->description, 120) }}
+                                    </span>
+
+                                    <span id="full-desc-{{ $work->id }}" style="display: none;">
+                                        {{ $work->description }}
+                                    </span>
                                 </p>
+
+                                <button class="btn btn-link p-0" onclick="toggleDesc({{ $work->id }})"
+                                    id="btn-{{ $work->id }}">
+                                    عرض المزيد
+                                </button>
+
+                                <script>
+                                    function toggleDesc(id) {
+                                        let shortDesc = document.getElementById('short-desc-' + id);
+                                        let fullDesc = document.getElementById('full-desc-' + id);
+                                        let btn = document.getElementById('btn-' + id);
+
+                                        if (fullDesc.style.display === 'none') {
+                                            shortDesc.style.display = 'none';
+                                            fullDesc.style.display = 'inline';
+                                            btn.innerText = 'عرض أقل';
+                                        } else {
+                                            shortDesc.style.display = 'inline';
+                                            fullDesc.style.display = 'none';
+                                            btn.innerText = 'عرض المزيد';
+                                        }
+                                    }
+                                </script>
                             </div>
 
                         </div>
