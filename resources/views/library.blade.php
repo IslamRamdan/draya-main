@@ -57,10 +57,41 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 border-0 shadow-sm custom-card">
 
-                            <div class="overflow-hidden" style="height: 200px;">
-                                <img src="{{ $library->image ? asset('storage/' . $library->image) : 'https://via.placeholder.com/800x200' }}"
-                                    class="card-img-top h-100 w-100 object-fit-cover transition-img"
-                                    alt="{{ $library->title }}">
+                            @php
+                                $file = $library->image;
+                                $extension = $file ? strtolower(pathinfo($file, PATHINFO_EXTENSION)) : null;
+                            @endphp
+
+                            <div class="overflow-hidden"
+                                style="height: 200px; display:flex; align-items:center; justify-content:center;">
+
+                                @if ($file)
+                                    @if ($extension === 'pdf')
+                                        {{-- صورة PDF --}}
+                                        <img src="https://img.freepik.com/vecteurs-premium/icone-du-logiciel-pdf_539007-781.jpg?semt=ais_hybrid&w=740"
+                                            class="h-100 object-fit-contain" alt="PDF">
+                                    @else
+                                        {{-- صورة عادية --}}
+                                        <img src="{{ asset('storage/' . $file) }}"
+                                            class="card-img-top h-100 w-100 object-fit-cover transition-img"
+                                            alt="{{ $library->title }}">
+                                    @endif
+                                @else
+                                    {{-- صورة افتراضية --}}
+                                    <img src="https://via.placeholder.com/800x200"
+                                        class="card-img-top h-100 w-100 object-fit-cover" alt="placeholder">
+                                @endif
+
+                            </div>
+
+                            {{-- زرار --}}
+                            <div class="mt-2 text-center">
+                                @if ($file)
+                                    <a href="{{ asset('storage/' . $file) }}" target="_blank"
+                                        class="btn {{ $extension === 'pdf' ? 'btn-danger' : 'btn-primary' }}">
+                                        {{ $extension === 'pdf' ? 'فتح PDF' : 'عرض الصورة' }}
+                                    </a>
+                                @endif
                             </div>
 
                             <div class="card-body p-4 transition-content">
@@ -76,8 +107,39 @@
                                 </div>
 
                                 <p class="card-text text-secondary small">
-                                    {{ Str::limit($library->description, 120) }}
+                                    <span id="short-desc-{{ $library->id }}">
+                                        {{ \Illuminate\Support\Str::limit($library->description, 100) }}
+                                    </span>
+
+                                    <span id="full-desc-{{ $library->id }}" style="display: none;">
+                                        {{ $library->description }}
+                                    </span>
                                 </p>
+
+                                @if (strlen($library->description) > 100)
+                                    <button class="btn btn-link p-0 small" onclick="toggleDesc({{ $library->id }})"
+                                        id="btn-{{ $library->id }}">
+                                        عرض المزيد
+                                    </button>
+                                @endif
+
+                                <script>
+                                    function toggleDesc(id) {
+                                        let shortDesc = document.getElementById('short-desc-' + id);
+                                        let fullDesc = document.getElementById('full-desc-' + id);
+                                        let btn = document.getElementById('btn-' + id);
+
+                                        if (fullDesc.style.display === 'none') {
+                                            shortDesc.style.display = 'none';
+                                            fullDesc.style.display = 'inline';
+                                            btn.innerText = 'عرض أقل';
+                                        } else {
+                                            shortDesc.style.display = 'inline';
+                                            fullDesc.style.display = 'none';
+                                            btn.innerText = 'عرض المزيد';
+                                        }
+                                    }
+                                </script>
 
                             </div>
 

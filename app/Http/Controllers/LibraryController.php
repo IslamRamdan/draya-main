@@ -25,7 +25,7 @@ class LibraryController extends Controller
             'title' => 'required',
             'description' => 'nullable',
             'case_type' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png'
+            'image' => 'nullable'
         ]);
 
         if ($request->hasFile('image')) {
@@ -51,7 +51,7 @@ class LibraryController extends Controller
             'title' => 'required',
             'description' => 'nullable',
             'case_type' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png'
+            'image' => 'nullable'
         ]);
 
         if ($request->hasFile('image')) {

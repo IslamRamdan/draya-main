@@ -33,35 +33,64 @@
                 </thead>
                 <tbody>
                     @foreach ($libraries as $item)
+                        @php
+                            $file = $item->image;
+                            $extension = $file ? strtolower(pathinfo($file, PATHINFO_EXTENSION)) : null;
+                        @endphp
+
                         <tr>
                             <td class="align-middle px-4 font-weight-bold text-dark">
                                 {{ $item->title }}
                             </td>
+
                             <td class="align-middle">
                                 <span class="badge badge-light border px-3 py-2" style="border-radius: 20px; color: #555;">
                                     {{ $item->case_type }}
                                 </span>
                             </td>
+
                             <td class="align-middle text-center">
-                                @if ($item->image)
-                                    <img src="{{ asset('storage/' . $item->image) }}"
-                                        class="img-thumbnail rounded-circle shadow-sm"
-                                        style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #fff;">
+                                @if ($file)
+                                    @if ($extension === 'pdf')
+                                        {{-- أيقونة PDF --}}
+                                        <img src="https://img.freepik.com/vecteurs-premium/icone-du-logiciel-pdf_539007-781.jpg?semt=ais_hybrid&w=740"
+                                            class="img-thumbnail rounded-circle shadow-sm"
+                                            style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #fff;">
+                                    @else
+                                        {{-- صورة عادية --}}
+                                        <img src="{{ asset('storage/' . $file) }}"
+                                            class="img-thumbnail rounded-circle shadow-sm"
+                                            style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #fff;">
+                                    @endif
                                 @else
+                                    {{-- مفيش صورة --}}
                                     <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center"
                                         style="width: 45px; height: 45px; border: 1px dashed #ccc;">
                                         <i class="fas fa-image text-muted small"></i>
                                     </div>
                                 @endif
                             </td>
+
                             <td class="align-middle text-center">
                                 <div class="btn-group">
+
+                                    {{-- زر عرض الملف --}}
+                                    @if ($file)
+                                        <a href="{{ asset('storage/' . $file) }}" target="_blank"
+                                            class="btn btn-sm mx-1 px-3 {{ $extension === 'pdf' ? 'btn-danger' : 'btn-info' }}"
+                                            style="border-radius: 6px;" title="عرض">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    @endif
+
+                                    {{-- تعديل --}}
                                     <a href="{{ route('libraries.edit', $item->id) }}"
                                         class="btn btn-outline-primary btn-sm mx-1 px-3" style="border-radius: 6px;"
                                         title="تعديل">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
 
+                                    {{-- حذف --}}
                                     <form action="{{ route('libraries.destroy', $item->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
@@ -71,6 +100,7 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
+
                                 </div>
                             </td>
                         </tr>
