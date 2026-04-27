@@ -21,7 +21,7 @@ Route::get('/aamal', function () {
 })->name('aamal');
 
 Route::get('/library', function () {
-    $libraries = Library::latest()->paginate(1);
+    $libraries = Library::latest()->get();
     return view('library', compact('libraries'));
 })->name('library');
 
